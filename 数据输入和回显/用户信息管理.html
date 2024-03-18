@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>在一个用户管理界面，用户可以编辑个人信息，如姓名、邮箱、电话等</title>
+</head>
+<body>
+<div>
+    <div>
+     <div>
+            <span>名称</span>
+            <input id="nameInput" value=""/>
+        </div>
+        <div>
+            <span>邮箱</span>
+            <input id="emailInput" value=""/>
+        </div>
+        <div>
+            <span>电话</span>
+            <input id="phoneInput" value=""/>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+// 展示 定义数据
+const userFormData = new Map();
+userFormData.set('name', 'John Doe');
+userFormData.set('email', 'john.doe@example.com');
+userFormData.set('phone', '123-456-7890');
+
+// 遍历Map并设置输入框的值
+for(let [key,value] of userFormData){
+    const inputElement = document.getElementById(key + 'Input')
+    if(inputElement){
+        inputElement.value = value
+    }
+}
+
+// 如果后端返回数据 要回显
+// 假设后端返回了如下数据
+const serverData = '{"name": "Jane Doe", "email": "jane.doe@example.com", "phone": "987-654-3210"}';
+
+// 解析 JSON 为对象，再转为 Map
+const updatedUserFormData = new Map(Object.entries(JSON.parse(serverData)))
+
+// 回显到表单元素 或者像上面的方式遍历
+document.getElementById('nameInput').value = updatedUserFormData.get('name');
+document.getElementById('emailInput').value = updatedUserFormData.get('email');
+document.getElementById('phoneInput').value = updatedUserFormData.get('phone');
+</script>
+</html>

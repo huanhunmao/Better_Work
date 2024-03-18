@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>管理员配置规则</title>
+  <style>
+  .rule-container {
+              margin-bottom: 1rem;
+          }
+</style>
+</head>
+<body>
+    <div id="app">
+        <!-- 动态生成的规则容器 -->
+    </div>
+</body>
+<script>
+// 示例 3 - 复杂场景的前端部分
+        const initialRulesConfig = [
+            {
+                conditions: new Map([
+                    ['department', 'sales'],
+                    ['role', 'manager'],
+                ]),
+                action: 'grantAccess',
+            },
+            // 更多规则...
+        ];
+
+         function renderRules(rules) {
+                    const appDiv = document.getElementById('app');
+                    appDiv.innerHTML = '';
+                    rules.forEach((rule, index) => {
+                        const ruleContainer = document.createElement('div');
+                        ruleContainer.className = 'rule-container';
+
+                        // 创建条件输入框
+                        rule.conditions.forEach((value, key) => {
+                            const label = document.createElement('label');
+                            label.textContent = `${key}:`;
+                            ruleContainer.appendChild(label);
+
+                            const input = document.createElement('input');
+                            input.type = 'text';
+                            input.value = value;
+                            input.addEventListener('input', () => {
+                                rules[index].conditions.set(key, input.value);
+                            });
+                            ruleContainer.appendChild(input);
+                        });
+
+                        // 创建操作类型选择器（简化为文本）
+                        const actionLabel = document.createElement('label');
+                        actionLabel.textContent = 'Action:';
+                        ruleContainer.appendChild(actionLabel);
+
+                        const actionText = document.createTextNode(rule.action);
+                        ruleContainer.appendChild(actionText);
+
+                        appDiv.appendChild(ruleContainer);
+                    });
+                }
+
+                        // 初始化页面渲染
+                        renderRules(initialRulesConfig);
+
+                        // 假设从后端获取更新后的规则数据
+                        const serverUpdatedRules = [
+                            {
+                                conditions: { department: 'marketing1111', role: 'admin11' },
+                                action: 'denyAccess',
+                            },
+                            // 更多规则...
+                        ];
+
+                        // 重建 Map 结构并回显到界面
+                        serverUpdatedRules.forEach((serverRule, index) => {
+                            initialRulesConfig[index].conditions = new Map(Object.entries(serverRule.conditions));
+                        });
+
+                        // 重新渲染页面以反映更新
+                        renderRules(initialRulesConfig);
+</script>
+</html>

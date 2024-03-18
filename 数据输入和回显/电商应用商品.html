@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Specs</title>
+    <style>
+        .spec-option { display: block; cursor: pointer; }
+        .selected { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h3>Color</h3>
+    <div id="color-specs"></div>
+
+    <h3>Size</h3>
+    <div id="size-specs"></div>
+
+    <script>
+        const productSpecs = new Map();
+        productSpecs.set('color', [
+            { value: 'red', price: 100 },
+            { value: 'blue', price: 105 },
+        ]);
+        productSpecs.set('size', [
+            { value: 'S', price: 95 },
+            { value: 'M', price: 100 }, // 注意这里修复了value应为price的错误
+        ]);
+
+        const selectedSpecs = new Map();
+        selectedSpecs.set('color', 'blue');
+        selectedSpecs.set('size', 'M');
+
+        function renderSpecs(specMap, selectedMap, containerId) {
+            // 1 获取外层容器
+            // 2 遍历数据拿到数据选项
+            // 3 给每个选项新增一个容器 并添加容器的内容 和样式 + 添加选中状态 class
+            // 4 添加对每个子项的监听 向选中的 map 中添加值  + 去掉之前的选中状态  + 添加新的 选中状态
+            // 5 将添加的子项 放入到外层容器中
+            const container = document.getElementById(containerId)
+
+             specMap.forEach((options, specName) => {
+                 options.forEach(option => {
+                     const divOption = document.createElement('div')
+                     divOption.textContent = `${option.value} ${option.price}`
+                     divOption.classList.add('spec-option')
+
+                     if(selectedMap.get(specName) === option.value){
+                         divOption.classList.add('selected')
+                     }
+
+                     divOption.addEventListener('click', () => {
+                         selectedSpecs.set(specName, option.value)
+                         container.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'))
+                         divOption.classList.add('selected')
+                     })
+
+                     container.appendChild(divOption)
+                 })
+             })
+        }
+
+        renderSpecs(productSpecs, selectedSpecs, 'color-specs');
+        renderSpecs(productSpecs, selectedSpecs, 'size-specs');
+    </script>
+</body>
+</html>
